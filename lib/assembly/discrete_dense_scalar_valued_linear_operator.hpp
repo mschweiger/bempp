@@ -40,7 +40,7 @@ public:
                            const arma::Col<ValueType>& argument,
                            arma::Col<ValueType>& result)
     {
-        result += multiplier * m_mat * argument;
+      //        result += multiplier * m_mat * argument;
     }
 
 private:
