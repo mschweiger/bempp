@@ -23,6 +23,7 @@
 
 #include "double_integrator.hpp"
 #include "opencl_options.hpp"
+#include "opencl_framework.hpp"
 
 namespace Fiber
 {
@@ -51,6 +52,7 @@ public:
             const Expression<ValueType>& testExpression,
             const Kernel<ValueType>& kernel,
             const Expression<ValueType>& trialExpression,
+	    const OpenClFramework<ValueType,int> &openClFramework,
             const OpenClOptions& openClOptions);
 
     virtual void integrate(
@@ -86,6 +88,7 @@ private:
     const Expression<ValueType>& m_testExpression;
     const Kernel<ValueType>& m_kernel;
     const Expression<ValueType>& m_trialExpression;
+    const OpenClFramework<ValueType,int>& m_openClFramework;
     OpenClOptions m_openClOptions;    
 };
 

@@ -5,6 +5,12 @@ enable_language(Fortran) # for BLAS
 # Module Path
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
+FIND_PACKAGE (OPENCL)
+
+INCLUDE_DIRECTORIES(
+    ${OPENCL_INCLUDE_DIR}
+)
+
 # Macros needed
 include(BemppOptions)
 include(BemppFindDependencies)

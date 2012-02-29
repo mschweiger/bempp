@@ -25,6 +25,7 @@
 #include "array_2d.hpp"
 #include "element_pair_topology.hpp"
 #include "opencl_options.hpp"
+#include "opencl_framework.hpp"
 #include "separable_numerical_double_integrator.hpp"
 
 #include "quadrature/galerkinduffy.hpp"
@@ -85,6 +86,7 @@ public:
             const Expression<ValueType>& testExpression,
             const Kernel<ValueType>& kernel,
             const Expression<ValueType>& trialExpression,
+	    const OpenClFramework<ValueType,int>& openClFramework,
             const OpenClOptions& openClOptions) :
         m_geometryFactory(geometryFactory),
         m_vertices(vertices),
@@ -93,6 +95,7 @@ public:
         m_testExpression(testExpression),
         m_kernel(kernel),
         m_trialExpression(trialExpression),
+	m_openClFramework(openClFramework),
         m_openClOptions(openClOptions)
     {
         if (vertices.n_rows != 3)
@@ -202,6 +205,7 @@ private:
                             m_geometryFactory,
                             m_vertices, m_elementCornerIndices, m_auxData,
                             m_testExpression, m_kernel, m_trialExpression,
+			    m_openClFramework,
                             m_openClOptions));
         }
         else
@@ -239,6 +243,7 @@ private:
                             m_geometryFactory,
                             m_vertices, m_elementCornerIndices, m_auxData,
                             m_testExpression, m_kernel, m_trialExpression,
+			    m_openClFramework,
                             m_openClOptions));
         }
         return *m_doubleIntegrators.insert(index, integrator).first->second;
@@ -442,6 +447,7 @@ private:
     const Expression<ValueType>& m_testExpression;
     const Kernel<ValueType>& m_kernel;
     const Expression<ValueType>& m_trialExpression;
+    const OpenClFramework<ValueType,int>& m_openClFramework;
     OpenClOptions m_openClOptions;
 
     IntegratorMap m_doubleIntegrators;

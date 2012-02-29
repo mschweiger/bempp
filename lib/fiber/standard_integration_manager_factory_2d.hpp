@@ -13,7 +13,10 @@ class StandardIntegrationManagerFactory2D :
         public IntegrationManagerFactory<ValueType, GeometryFactory>
 {
 public:
-    StandardIntegrationManagerFactory2D(const OpenClOptions& openClOptions) :
+    StandardIntegrationManagerFactory2D(
+	const OpenClFramework<ValueType,int> &openClFramework,
+	const OpenClOptions& openClOptions) :
+        m_openClFramework(openClFramework),
         m_openClOptions(openClOptions)
     {}
 
@@ -30,10 +33,11 @@ public:
                     new StandardIntegrationManager2D<ValueType, GeometryFactory>(
                         geometryFactory, vertices, elementCornerIndices, auxData,
                         testExpression, kernel, trialExpression,
-                        m_openClOptions));
+                        m_openClFramework, m_openClOptions));
     }
 
 private:
+    const OpenClFramework<ValueType,int> &m_openClFramework;
     OpenClOptions m_openClOptions;
 };
 

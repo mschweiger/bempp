@@ -10,6 +10,7 @@
 #include "geometrical_data.hpp"
 #include "kernel.hpp"
 #include "opencl_options.hpp"
+#include "opencl_framework.hpp"
 #include "types.hpp"
 
 #include <cassert>
@@ -32,6 +33,7 @@ SeparableNumericalDoubleIntegrator(
         const Expression<ValueType>& testExpression,
         const Kernel<ValueType>& kernel,
         const Expression<ValueType>& trialExpression,
+	const OpenClFramework<ValueType,int> &openClFramework,
         const OpenClOptions& openClOptions) :
     m_localTestQuadPoints(localTestQuadPoints),
     m_localTrialQuadPoints(localTrialQuadPoints),
@@ -44,6 +46,7 @@ SeparableNumericalDoubleIntegrator(
     m_testExpression(testExpression),
     m_kernel(kernel),
     m_trialExpression(trialExpression),
+    m_openClFramework(openClFramework),
     m_openClOptions(openClOptions)
 {}
 

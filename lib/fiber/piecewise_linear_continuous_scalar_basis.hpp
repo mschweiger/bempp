@@ -84,6 +84,19 @@ public:
                                      "not implemented yet");
         }
     }
+
+#ifdef USE_OPENCL
+
+    virtual void evaluateCL (CL *cl,
+			     int what,
+			     const arma::Mat<ValueType>& points,
+			     LocalDofIndex localDofIndex,
+			     BasisData<ValueType>& data) const
+  {
+      cl->evaluateLinearContinuousScalarBasis (what, points, localDofIndex, data);
+  }
+
+#endif // USE_OPENCL
 };
 
 } // namespace Fiber
