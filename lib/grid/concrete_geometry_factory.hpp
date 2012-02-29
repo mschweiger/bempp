@@ -1,11 +1,16 @@
-#ifndef CONCRETE_GEOMETRY_FACTORY_HPP
-#define CONCRETE_GEOMETRY_FACTORY_HPP
+#ifndef bempp_concrete_geometry_factory_hpp
+#define bempp_concrete_geometry_factory_hpp
 
 #include "geometry_factory.hpp"
 #include "concrete_geometry.hpp"
 
 namespace Bempp
 {
+
+/** \brief Factory able to construct an "empty" geometry wrapping a Dune
+  geometry of type DuneGeometry.
+
+  \note For internal use (in integrators from the Fiber module). */
 
 template <typename DuneGeometry>
 class ConcreteGeometryFactory : public GeometryFactory
@@ -16,6 +21,6 @@ class ConcreteGeometryFactory : public GeometryFactory
     }
 };
 
-}
+} // namespace Bempp
 
-#endif // CONCRETE_GEOMETRY_FACTORY_HPP
+#endif

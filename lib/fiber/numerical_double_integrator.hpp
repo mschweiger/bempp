@@ -1,4 +1,4 @@
-// Copyright (C) 2011-2012 by the BEM++ Authors
+// Copyright (C) 2011-2012 by the Fiber Authors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,32 +18,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef bempp_single_layer_potential_3d_kernel_hpp
-#define bempp_single_layer_potential_3d_kernel_hpp
+#ifndef fiber_numerical_double_integrator_hpp
+#define fiber_numerical_double_integrator_hpp
 
-#include "kernel.hpp"
-#include <armadillo>
+#include "double_integrator.hpp"
 
-namespace Bempp
+namespace Fiber
 {
 
-template <typename ValueType>
-class SingleLayerPotential3DKernel : public Kernel<ValueType>
+template <typename ValueType> class Expression;
+template <typename ValueType> class Kernel;
+
+/** \brief Integration over pairs of elements. */
+template <typename ValueType, typename GeometryFactory>
+class NumericalDoubleIntegrator :
+        public DoubleIntegrator<ValueType>
 {
 public:
-    virtual int worldDimension() const { return 3; }
-    virtual int domainDimension() const { return 1; }
-    virtual int codomainDimension() const { return 1; }
-    virtual bool needsTestNormal() const { return false; }
-    virtual bool needsTrialNormal() const { return false; }
+    typedef typename DoubleIntegrator<ValueType>::ElementIndexPair
+    ElementIndexPair;
 
-    virtual void evaluate(const arma::Mat<ctype> &testPoints,
-                          const arma::Mat<ctype> &trialPoints,
-                          const arma::Mat<ctype> & /* testNormals */,
-                          const arma::Mat<ctype> & /* trialNormals */,
-                          arma::Cube<ValueType>& result) const;
+protected:
+    static void setupGeometry(int elementIndex,
+                              const arma::Mat<ValueType>& vertices,
+                              const arma::Mat<int>& elementCornerIndices,
+                              const arma::Mat<char>& auxElementData,
+                              typename GeometryFactory::Geometry& geometry);
 };
 
-} // namespace Bempp
+} // namespace Fiber
+
+#include "numerical_double_integrator_imp.hpp"
 
 #endif
