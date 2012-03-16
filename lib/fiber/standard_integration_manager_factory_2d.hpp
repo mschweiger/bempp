@@ -14,7 +14,7 @@ class StandardIntegrationManagerFactory2D :
 {
 public:
     StandardIntegrationManagerFactory2D(
-	const OpenClFramework<ValueType,int> &openClFramework,
+	const OpenClFramework<ValueType,int>* openClFramework,
 	const OpenClOptions& openClOptions) :
         m_openClFramework(openClFramework),
         m_openClOptions(openClOptions)
@@ -37,7 +37,7 @@ public:
     }
 
 private:
-    const OpenClFramework<ValueType,int> &m_openClFramework;
+    const OpenClFramework<ValueType,int>* m_openClFramework;
     OpenClOptions m_openClOptions;
 };
 

@@ -21,6 +21,7 @@
 #ifndef fiber_single_layer_potential_3d_kernel_hpp
 #define fiber_single_layer_potential_3d_kernel_hpp
 
+#include "opencl_framework.hpp"
 #include "kernel.hpp"
 #include <armadillo>
 
@@ -45,6 +46,15 @@ public:
     virtual void evaluateOnGrid(const GeometricalData<ValueType>& testGeomData,
                                 const GeometricalData<ValueType>& trialGeomData,
                                 Array4D<ValueType>& result) const;
+
+    /**
+     * \brief Returns an OpenCL code snippet for kernel evaluation as a string.
+     * \note The code snippet provides device functions devKernevalGrid and devKernevalPair
+     *   (see CL/single_layer_potential_3D_kernel.cl)
+     * \note This method is independent of data, unlike the CPU versions, because the
+     *   data for multiple elements are pushed to the device separately.
+     */
+    virtual std::string evaluateClCode () const;
 };
 
 } // namespace Fiber

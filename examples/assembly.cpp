@@ -27,6 +27,7 @@
 
 #include "assembly/discrete_scalar_valued_linear_operator.hpp"
 #include "fiber/standard_integration_manager_factory_2d.hpp"
+#include "fiber/opencl_framework.hpp"
 
 #include "grid/entity.hpp"
 #include "grid/entity_iterator.hpp"
@@ -50,6 +51,7 @@ using std::endl;
 int main()
 {
     const char MESH_FNAME[] = "simple_mesh_9_elements.msh";
+    bool use_opencl = true;
 
     // Import the grid
     GridParameters params;
@@ -65,9 +67,12 @@ int main()
     AssemblyOptions assemblyOptions;
     assemblyOptions.mode = ASSEMBLY_MODE_DENSE;
 
+    Fiber::OpenClFramework<double,int> *openClFramework = NULL;
+    if (use_opencl)
+        openClFramework = new Fiber::OpenClFramework<double,int>;
     Fiber::OpenClOptions openClOptions;
-    openClOptions.useOpenCl = false;
-    Fiber::StandardIntegrationManagerFactory2D<double, GeometryFactory> factory(openClOptions);
+    openClOptions.useOpenCl = use_opencl;
+    Fiber::StandardIntegrationManagerFactory2D<double, GeometryFactory> factory(openClFramework, openClOptions);
 
     SingleLayerPotential3D<double> op;
     std::auto_ptr<DiscreteScalarValuedLinearOperator<double> > result =

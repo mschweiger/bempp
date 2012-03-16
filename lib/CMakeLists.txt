@@ -22,6 +22,7 @@ target_link_libraries (bempp
 	${BLAS_LIB}
 	${LIB_DUNE_COMMON}
 	${LIB_DUNE_GRID}
+	${OPENCL_LIBRARIES}
 	)
 
 

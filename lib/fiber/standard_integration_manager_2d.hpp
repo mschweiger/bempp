@@ -86,7 +86,7 @@ public:
             const Expression<ValueType>& testExpression,
             const Kernel<ValueType>& kernel,
             const Expression<ValueType>& trialExpression,
-	    const OpenClFramework<ValueType,int>& openClFramework,
+	    const OpenClFramework<ValueType,int>* openClFramework,
             const OpenClOptions& openClOptions) :
         m_geometryFactory(geometryFactory),
         m_vertices(vertices),
@@ -447,7 +447,7 @@ private:
     const Expression<ValueType>& m_testExpression;
     const Kernel<ValueType>& m_kernel;
     const Expression<ValueType>& m_trialExpression;
-    const OpenClFramework<ValueType,int>& m_openClFramework;
+    const OpenClFramework<ValueType,int>* m_openClFramework;
     OpenClOptions m_openClOptions;
 
     IntegratorMap m_doubleIntegrators;

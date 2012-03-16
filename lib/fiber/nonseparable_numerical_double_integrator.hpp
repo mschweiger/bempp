@@ -23,6 +23,7 @@
 
 #include "numerical_double_integrator.hpp"
 #include "opencl_options.hpp"
+#include "opencl_framework.hpp"
 
 namespace Fiber
 {
@@ -50,7 +51,8 @@ public:
             const Expression<ValueType>& testExpression,
             const Kernel<ValueType>& kernel,
             const Expression<ValueType>& trialExpression,
-            const OpenClOptions& openClOptions);
+            const OpenClOptions& openClOptions,
+	    OpenClFramework<ValueType,int> *openClFramework = NULL);
 
     virtual void integrate(
             CallVariant callVariant,
@@ -67,10 +69,19 @@ public:
             const Basis<ValueType>& trialBasis,
             arma::Cube<ValueType>& result) const;
 
+    virtual void integrateCl(
+	    OpenClFramework<ValueType,int>& clFramework,
+            const std::vector<ElementIndexPair>& elementIndexPairs,
+            const Basis<ValueType>& testBasis,
+            const Basis<ValueType>& trialBasis,
+            arma::Cube<ValueType>& result) const;
+
 private:
     void setupGeometryConveniently(
             int elementIndex,
             typename GeometryFactory::Geometry& geometry) const;
+
+    void setupOpenClData ();
 
 private:
     arma::Mat<ValueType> m_localTestQuadPoints;
@@ -86,6 +97,12 @@ private:
     const Kernel<ValueType>& m_kernel;
     const Expression<ValueType>& m_trialExpression;
     OpenClOptions m_openClOptions;    
+    OpenClFramework<ValueType,int> *m_openClFramework;
+
+    struct openClEnvironment {
+        int pointCount;
+        cl::Buffer *clBufQuadWeight;
+    } clEnv;
 };
 
 } // namespace Fiber

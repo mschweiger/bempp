@@ -5,6 +5,7 @@
 
 #include "basis_data.hpp"
 #include "dune_basis_helper.hpp"
+#include "CL/piecewise_linear_continuous_scalar_basis.cl.str"
 
 #include <dune/localfunctions/lagrange/p1/p1localbasis.hh>
 #include <dune/localfunctions/lagrange/q1/q1localbasis.hh>
@@ -85,18 +86,12 @@ public:
         }
     }
 
-#ifdef USE_OPENCL
+    virtual std::string clCodeString() const
+    {
+        return std::string (piecewise_linear_continuous_scalar_basis_cl,
+			    piecewise_linear_continuous_scalar_basis_cl_len);
+    }
 
-    virtual void evaluateCL (CL *cl,
-			     int what,
-			     const arma::Mat<ValueType>& points,
-			     LocalDofIndex localDofIndex,
-			     BasisData<ValueType>& data) const
-  {
-      cl->evaluateLinearContinuousScalarBasis (what, points, localDofIndex, data);
-  }
-
-#endif // USE_OPENCL
 };
 
 } // namespace Fiber

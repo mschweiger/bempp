@@ -31,7 +31,8 @@ NonseparableNumericalDoubleIntegrator(
         const Expression<ValueType>& testExpression,
         const Kernel<ValueType>& kernel,
         const Expression<ValueType>& trialExpression,
-        const OpenClOptions& openClOptions) :
+        const OpenClOptions& openClOptions,
+	OpenClFramework<ValueType,int> *openClFramework) :
     m_localTestQuadPoints(localTestQuadPoints),
     m_localTrialQuadPoints(localTrialQuadPoints),
     m_quadWeights(quadWeights),
@@ -42,7 +43,8 @@ NonseparableNumericalDoubleIntegrator(
     m_testExpression(testExpression),
     m_kernel(kernel),
     m_trialExpression(trialExpression),
-    m_openClOptions(openClOptions)
+    m_openClOptions(openClOptions),
+    m_openClFramework(openClFramework)
 {
     const int pointCount = quadWeights.size();
     if (localTestQuadPoints.n_cols != pointCount ||
@@ -50,6 +52,9 @@ NonseparableNumericalDoubleIntegrator(
         throw std::invalid_argument("NonseparableNumericalDoubleIntegrator::"
                                     "NonseparableNumericalDoubleIntegrator(): "
                                     "numbers of points and weights do not match");
+
+    if (openClFramework)
+        setupOpenClData();
 }
 
 
@@ -61,6 +66,14 @@ setupGeometryConveniently(
     setupGeometry(elementIndex,
                   m_vertices, m_elementCornerIndices, m_auxElementData,
                   geometry);
+}
+
+template <typename ValueType, typename GeometryFactory>
+void NonseparableNumericalDoubleIntegrator<ValueType, GeometryFactory>::
+setupOpenClData ()
+{
+    clEnv.pointCount = m_quadWeights.size();
+    clEnv.clBufQuadWeight = m_openClFramework->pushValueVector (m_quadWeights);
 }
 
 template <typename ValueType, typename GeometryFactory>
@@ -263,5 +276,18 @@ void NonseparableNumericalDoubleIntegrator<ValueType, GeometryFactory>::integrat
             }
     }
 }
+
+template <typename ValueType, typename GeometryFactory>
+void NonseparableNumericalDoubleIntegrator<ValueType, GeometryFactory>::integrateCl(
+	    OpenClFramework<ValueType,int>& clFramework,
+            const std::vector<ElementIndexPair>& elementIndexPairs,
+            const Basis<ValueType>& testBasis,
+            const Basis<ValueType>& trialBasis,
+            arma::Cube<ValueType>& result) const
+{
+    const int geometryPairCount = elementIndexPairs.size();
+
+}
+
 
 } // namespace Fiber

@@ -52,10 +52,31 @@ public:
             const Expression<ValueType>& testExpression,
             const Kernel<ValueType>& kernel,
             const Expression<ValueType>& trialExpression,
-	    const OpenClFramework<ValueType,int> &openClFramework,
+	    const OpenClFramework<ValueType,int>* openClFramework,
             const OpenClOptions& openClOptions);
 
+    virtual ~SeparableNumericalDoubleIntegrator();
+
     virtual void integrate(
+            CallVariant callVariant,
+            const std::vector<int>& elementIndicesA,
+            int elementIndexB,
+            const Basis<ValueType>& basisA,
+            const Basis<ValueType>& basisB,
+            LocalDofIndex localDofIndexB,
+            arma::Cube<ValueType>& result) const;
+
+    virtual void integrateCpu(
+            CallVariant callVariant,
+            const std::vector<int>& elementIndicesA,
+            int elementIndexB,
+            const Basis<ValueType>& basisA,
+            const Basis<ValueType>& basisB,
+            LocalDofIndex localDofIndexB,
+            arma::Cube<ValueType>& result) const;
+
+    virtual void integrateCl(
+	    const OpenClFramework<ValueType,int> *openClFramework,
             CallVariant callVariant,
             const std::vector<int>& elementIndicesA,
             int elementIndexB,
@@ -75,6 +96,12 @@ private:
             int elementIndex,
             typename GeometryFactory::Geometry& geometry) const;
 
+    /**
+     * \brief Returns an OpenCL code snippet containing the clIntegrate
+     *   kernel function for integrating a single row or column
+     */
+    const std::string clStrIntegrateRowOrCol () const;
+
 private:
     arma::Mat<ValueType> m_localTestQuadPoints;
     arma::Mat<ValueType> m_localTrialQuadPoints;
@@ -89,8 +116,10 @@ private:
     const Expression<ValueType>& m_testExpression;
     const Kernel<ValueType>& m_kernel;
     const Expression<ValueType>& m_trialExpression;
-    const OpenClFramework<ValueType,int>& m_openClFramework;
-    OpenClOptions m_openClOptions;    
+    const OpenClFramework<ValueType,int>* m_openClFramework;
+    OpenClOptions m_openClOptions;
+    cl::Buffer *clTestQuadPoints;
+    cl::Buffer *clTrialQuadPoints;
 };
 
 } // namespace Fiber

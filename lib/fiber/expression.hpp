@@ -42,6 +42,15 @@ public:
     virtual void evaluate(const BasisData<ValueType>& basisData,
                           const GeometricalData<ValueType>& geomData,
                           arma::Cube<ValueType>& result) const = 0;
+
+    /**
+     * \brief Return an OpenCL code snippet providing device function
+     *   devExpressionEvaluate<modifier>
+     * \note <modifier> can be used to differentiate between different
+     *   usages, e.g. "Trial"/"Test"
+     */
+    virtual const std::string clStringEvaluate (const std::string modifier)
+        const = 0;
 };
 
 } // namespace Fiber
